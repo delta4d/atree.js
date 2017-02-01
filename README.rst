@@ -23,7 +23,7 @@ Usage
 
 ::
 
-    atree.js $ atree --help
+    atree.js $ atree
     Usage: atree DIR
         -E [pattern]    ignore file matching patterns
 
