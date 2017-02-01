@@ -27,7 +27,9 @@ const walk = function(file, exclude) {
 		const stat = fs.lstatSync(file);
 		if (!stat.isDirectory()) return;
 
-		const files = fs.readdirSync(file).filter(name => !exclude.some(pattern => name.match(pattern)));
+		const files = fs.readdirSync(file)
+		                .filter(name => !exclude.some(pattern => name.match(pattern)))
+		                .sort();
 		const len = files.length;
 		for (let i=0; i<len; ++i) {
 			_walk(path.join(file, files[i]), depth+1, i+1===len);

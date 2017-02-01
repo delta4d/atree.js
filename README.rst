@@ -27,12 +27,14 @@ Usage
     Usage: atree DIR
         -E [pattern]    ignore file matching patterns
 
-    atree.js $ atree .
+    atree.js $ atree . -E .git node_modules
     .
-    ├── cli.js
+    ├── .travis.yml
     ├── LICENSE
-    ├── package.json
     ├── README.rst
+    ├── TODO
+    ├── cli.js
+    ├── package.json
     └── test.js
 
 Tests
