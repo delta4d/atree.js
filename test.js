@@ -13,7 +13,8 @@ const expect = `.
 ├── LICENSE
 ├── package.json
 ├── README.rst
-└── test.js
+├── test.js
+└── TODO
 `;
 
 assert.equal(expect, actual, `Expect ${expect}\n but found ${actual}`);
