@@ -4,17 +4,23 @@
 
 const fs = require("fs");
 const path = require("path");
+const arg_parser = require("minimist");
 
 const help = function() {
-	console.log("Usage: atree DIR");
-	console.log("\t-E [pattern]\tignore file matching patterns");
+	console.log("Usage: atree [options] [directory=.]");
+	console.log();
+	console.log("    atree -a                show hidden files");
+	console.log("    atree -P pattern        only list file match pattern");
+	console.log("    atree -I pattern        do not list file match pattern");
 }
 
-const walk = function(file, exclude) {
+const walk = function(file, opts) {
 	const V_BAR   = "│   ";
 	const EMPTY   = "    ";
 	const CORNER1 = "└── ";
 	const CORNER2 = "├── ";
+	var dir_cnt   = -1; // exclude current directory
+	var file_cnt  = 0;
 
 	const _prefix = function(file, is_last, prev) {
 		const filename = path.basename(file);
@@ -24,15 +30,35 @@ const walk = function(file, exclude) {
 		           .join("") + (is_last ? CORNER1 : CORNER2) + filename;
 	}
 
+	const _filter = function(dir) {
+		let files = fs.readdirSync(dir);
+
+		if (!opts.a) {
+			files = files.filter(name => name.match(/^[^.].*$/));
+		}
+
+		if (opts.P) {
+			files = files.filter(name => name.match(opts.P));
+		}
+
+		if (opts.I) {
+			files = files.filter(name => !name.match(opts.I));
+		}
+
+		return files;
+	}
+
 	const _walk = function(file, is_last, prev) {
 		console.log(_prefix(file, is_last, prev));
 
 		const stat = fs.lstatSync(file);
-		if (!stat.isDirectory()) return;
+		if (!stat.isDirectory()) {
+			++file_cnt;
+			return;
+		}
+		++dir_cnt;
 
-		const files = fs.readdirSync(file)
-		                .filter(name => !exclude.some(pattern => name.match(pattern)))
-		                .sort();
+		const files = _filter(file);
 		const len = files.length;
 		prev.push(is_last);
 		for (let i=0; i<len; ++i) {
@@ -43,23 +69,23 @@ const walk = function(file, exclude) {
 		prev.pop();
 	};
 
-	return _walk(file, true, []);
+	_walk(file, true, []);
+	console.log();
+	console.log(`${dir_cnt} directories, ${file_cnt} files`);
 }
 
 const argv = process.argv.slice(2);
-
-if (argv.length > 0) {
-	const file = argv[0];
-	const stat = fs.lstatSync(file);
-	if (stat.isDirectory()) {
-		let exclude = [];
-		if (argv.length > 1 && argv[1] == "-E") {
-			exclude = argv.slice(2);
-		}
-		walk(file, exclude);
-	} else {
-		console.log(`${file} is not a valid directory!`);
+const opts = arg_parser(argv, {
+	boolean: ["a", "help"],
+	default: {
+		a: false,
+		help: false,
 	}
-} else {
+});
+
+if (opts.help) {
 	help();
+} else {
+	const file = opts._.length == 0 ? "." : opts[_][0];
+	walk(file, opts);
 }

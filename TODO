@@ -1,1 +1,3 @@
-1. add color support
+[ ] add color support
+[ ] add test
+[x] use argument parser

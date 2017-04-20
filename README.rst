@@ -23,26 +23,12 @@ Usage
 
 ::
 
-    atree.js $ atree
-    Usage: atree DIR
-        -E [pattern]    ignore file matching patterns
+    atree.js $ atree --help
+    Usage: atree [options] [directory=.]
 
-    atree.js $ atree . -E .git node_modules
-    .
-    ├── .travis.yml
-    ├── LICENSE
-    ├── README.rst
-    ├── TODO
-    ├── cli.js
-    ├── package.json
-    └── test.js
-
-Tests
------
-
-::
-
-    npm test
+        atree -a                show hidden files
+        atree -P pattern        only list file match pattern
+        atree -I pattern        do not list file match pattern
 
 
 Contributing

@@ -1,25 +1,28 @@
 {
-    "name": "atree",
-    "version": "0.0.2",
-    "description": "display directory tree structure in terminal",
-    "scripts": {
-        "test": "node test.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/delta4d/atree.js.git"
-    },
-    "keywords": [
-        "tree",
-        "cli"
-    ],
-    "bin": {
-        "atree": "cli.js"
-    },
-    "author": "delta",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/delta4d/atree.js/issues"
-    },
-    "homepage": "https://github.com/delta4d/atree.js#readme"
+  "name": "atree",
+  "version": "0.0.3",
+  "description": "display directory tree structure in terminal",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delta4d/atree.js.git"
+  },
+  "keywords": [
+    "tree",
+    "cli"
+  ],
+  "bin": {
+    "atree": "cli.js"
+  },
+  "author": "delta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/delta4d/atree.js/issues"
+  },
+  "homepage": "https://github.com/delta4d/atree.js#readme",
+  "dependencies": {
+    "minimist": "^1.2.0"
+  }
 }
