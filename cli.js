@@ -71,7 +71,7 @@ const walk = function(file, opts) {
 
 	_walk(file, true, []);
 	console.log();
-	console.log(`${dir_cnt} directories, ${file_cnt} files`);
+	console.log(`${dir_cnt} directori${dir_cnt == 1 ? "y" : "es"}, ${file_cnt} files`);
 }
 
 const argv = process.argv.slice(2);
