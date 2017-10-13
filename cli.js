@@ -86,6 +86,6 @@ const opts = arg_parser(argv, {
 if (opts.help) {
 	help();
 } else {
-	const file = opts._.length == 0 ? "." : opts[_][0];
+	const file = opts._.length == 0 ? "." : opts._[0];
 	walk(file, opts);
 }

@@ -1,6 +1,6 @@
 {
   "name": "atree",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "display directory tree structure in terminal",
   "scripts": {
     "test": "node test.js"
