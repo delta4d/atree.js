@@ -8,22 +8,28 @@ const arg_parser = require("minimist");
 const color_info = require("ls-colors");
 const FStatMode = require("fstat-mode");
 
-const help = function() {
+const help = () => {
     console.log("Usage: atree [options] [directory=.]");
     console.log();
     console.log("    -a                show hidden files");
     console.log("    --help            show this message");
+    console.log("    --color           color output");
+    console.log("                      auto/always/never. default to auto");
 }
 
-const walk = function(file, opts) {
+const walk = (file, opts) => {
     const V_BAR   = "│   ";
     const EMPTY   = "    ";
     const CORNER1 = "└── ";
     const CORNER2 = "├── ";
+    const NEED_COLOR = opts.color === "always" ||
+                       opts.color === "auto" && process.stdout.isTTY;
+
     var dir_cnt   = -1; // exclude current directory
     var file_cnt  = 0;
 
-    const _colorize = function(filename, mode) {
+    const _colorize = (filename, mode) => {
+        if (!NEED_COLOR) return filename;
         const wrap = (c) => `\u001b[${c}m${filename}\u001b[0m`;
         if (mode.is_socket)     return wrap(color_info['so']);
         if (mode.is_symbolic)   return wrap(color_info['ln']);
@@ -37,7 +43,7 @@ const walk = function(file, opts) {
         return color_info[ext_pattern] ? wrap(color_info[ext_pattern]) : filename;
     }
 
-    const _prefix = function(file, is_last, prev) {
+    const _prefix = (file, is_last, prev) => {
         const mode = new FStatMode(fs.lstatSync(file));
         const raw_filename = path.basename(file);
         const filename = _colorize(raw_filename, mode);
@@ -47,7 +53,7 @@ const walk = function(file, opts) {
                    .join("") + (is_last ? CORNER1 : CORNER2) + filename;
     }
 
-    const _filter = function(dir) {
+    const _filter = (dir) => {
         let files = fs.readdirSync(dir);
 
         if (!opts.a) {
@@ -65,7 +71,7 @@ const walk = function(file, opts) {
         return files;
     }
 
-    const _walk = function(file, is_last, prev) {
+    const _walk = (file, is_last, prev) => {
         console.log(_prefix(file, is_last, prev));
 
         const stat = fs.lstatSync(file);
@@ -95,15 +101,38 @@ var unknown = [];
 const argv = process.argv.slice(2);
 const opts = arg_parser(argv, {
     boolean: ["a", "help"],
+    string: ["color"],
     default: {
         a: false,
         help: false,
+        color: "auto"
     },
     unknown: (arg) => {
         unknown.push(arg);
         return false;
     }
 });
+
+const valid_opts = {
+    a: [false, true],
+    help: [false, true],
+    color: ["auto", "always", "never"],
+};
+
+const check_opts = (opts, valid_opts) => {
+    for (let k in valid_opts) {
+        if (!valid_opts[k].includes(opts[k])) {
+            console.log(`Invalid argument for ${k}: ${opts[k]}`);
+            console.log(`Valid arguments are ${valid_opts[k].join(', ')}`);
+            console.log();
+            help();
+            return false;
+        }
+    }
+    return true;
+}
+
+if (!check_opts(opts, valid_opts)) process.exit();
 
 if (unknown.length > 0) {
     console.log(`Unknow options: ${unknown.join(', ')}`);

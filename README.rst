@@ -26,9 +26,10 @@ Usage
     atree.js $ atree --help
     Usage: atree [options] [directory=.]
 
-        atree -a                show hidden files
-        atree -P pattern        only list file match pattern
-        atree -I pattern        do not list file match pattern
+    -a                show hidden files
+    --help            show this message
+    --color           color output
+                      auto/always/never. default to auto
 
 
 Contributing
