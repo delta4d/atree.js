@@ -11,7 +11,8 @@ const FStatMode = require("fstat-mode");
 const help = function() {
     console.log("Usage: atree [options] [directory=.]");
     console.log();
-    console.log("    atree -a                show hidden files");
+    console.log("    -a                show hidden files");
+    console.log("    --help            show this message");
 }
 
 const walk = function(file, opts) {
@@ -90,16 +91,25 @@ const walk = function(file, opts) {
     console.log(`${dir_cnt} director${dir_cnt == 1 ? "y" : "ies"}, ${file_cnt} files`);
 }
 
+var unknown = [];
 const argv = process.argv.slice(2);
 const opts = arg_parser(argv, {
     boolean: ["a", "help"],
     default: {
         a: false,
         help: false,
+    },
+    unknown: (arg) => {
+        unknown.push(arg);
+        return false;
     }
 });
 
-if (opts.help) {
+if (unknown.length > 0) {
+    console.log(`Unknow options: ${unknown.join(', ')}`);
+    console.log();
+    help();
+} else if (opts.help) {
     help();
 } else {
     const file = opts._.length == 0 ? "." : opts._[0];
