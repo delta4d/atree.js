@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/delta4d/atree.js#readme",
   "dependencies": {
+    "fstat-mode": "0.0.1",
+    "ls-colors": "^0.1.0",
     "minimist": "^1.2.0"
   }
 }
