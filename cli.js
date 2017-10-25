@@ -129,18 +129,20 @@ const check_opts = (opts, valid_opts) => {
             return false;
         }
     }
+    for (let k in unknown) if (k[0] == '-') {
+        console.log(`Unknow options: ${k}`);
+        console.log();
+        help();
+        return false;
+    }
     return true;
 }
 
 if (!check_opts(opts, valid_opts)) process.exit();
 
-if (unknown.length > 0) {
-    console.log(`Unknow options: ${unknown.join(', ')}`);
-    console.log();
-    help();
-} else if (opts.help) {
+if (opts.help) {
     help();
 } else {
-    const file = opts._.length == 0 ? "." : opts._[0];
+    const file = unknown.length == 0 ? "." : unknown[0];
     walk(file, opts);
 }

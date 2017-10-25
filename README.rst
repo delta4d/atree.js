@@ -26,10 +26,10 @@ Usage
     atree.js $ atree --help
     Usage: atree [options] [directory=.]
 
-    -a                show hidden files
-    --help            show this message
-    --color           color output
-                      auto/always/never. default to auto
+        -a                show hidden files
+        --help            show this message
+        --color           color output
+                          auto/always/never. default to auto
 
 
 Contributing
