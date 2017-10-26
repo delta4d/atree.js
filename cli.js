@@ -60,14 +60,6 @@ const walk = (file, opts) => {
             files = files.filter(name => name.match(/^[^.].*$/));
         }
 
-        if (opts.P) {
-            files = files.filter(name => name.match(opts.P));
-        }
-
-        if (opts.I) {
-            files = files.filter(name => !name.match(opts.I));
-        }
-
         return files;
     }
 
@@ -92,9 +84,16 @@ const walk = (file, opts) => {
         prev.pop();
     };
 
-    _walk(file, true, []);
-    console.log();
-    console.log(`${dir_cnt} director${dir_cnt == 1 ? "y" : "ies"}, ${file_cnt} files`);
+    fs.lstat(file, (err, stat) => {
+        if (err || !stat.isDirectory()) {
+            console.log(`${file} [error opening dir]`);
+        } else {
+            _walk(file, true, []);
+        }
+        console.log();
+        if (dir_cnt < 0) dir_cnt = 0;
+        console.log(`${dir_cnt} director${dir_cnt == 1 ? "y" : "ies"}, ${file_cnt} files`);
+    });
 }
 
 var unknown = [];
